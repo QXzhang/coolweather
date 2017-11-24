@@ -1,9 +1,11 @@
 package com.coolweather.android;
 
-import android.support.v4.app.Fragment;
-//import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +53,7 @@ public class ChooseAreaFragment extends Fragment {
 
     private Province selectedProvince;
     private City selectedCity;
-    private County selectedCounty;
+    //private County selectedCounty;
     private int currentLevel;
 
     @Override
@@ -88,11 +90,13 @@ public class ChooseAreaFragment extends Fragment {
             @Override
             public void onClick(View v){
                 if (currentLevel==LEVEL_COUNTY){
+                    Toast.makeText(getContext(),"返回城市列表",Toast.LENGTH_SHORT).show();
                     queryCities();
                 }else if (currentLevel==LEVEL_PROVINCE){
+                    Toast.makeText(getContext(),"返回省份列表",Toast.LENGTH_SHORT).show();
                     queryProvinces();
                 }
-
+                Toast.makeText(getContext(),String.valueOf(currentLevel),Toast.LENGTH_SHORT).show();
             }
         });
         queryProvinces();
@@ -156,6 +160,7 @@ public class ChooseAreaFragment extends Fragment {
             int cityCode=selectedCity.getCityCode();
             String address = "http://guolin.tech/api/china/"+provinceCode+"/"+cityCode;
             queryFromServer(address,"county");
+            Toast.makeText(getContext(),"县级列表获取成功",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -186,7 +191,7 @@ public class ChooseAreaFragment extends Fragment {
                     result = Utility.handleCountyResponse(responseText,selectedCity.getId());
 
                 }
-
+                Toast.makeText(getContext(),String.valueOf(result),Toast.LENGTH_SHORT).show();
                 if (result){
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -197,7 +202,7 @@ public class ChooseAreaFragment extends Fragment {
                             }else if ("city".equals(type)){
                                 queryCities();
                             }else if ("county".equals(type)){
-
+                                queryCounties();
                             }
                         }
                     });
